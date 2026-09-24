@@ -1,56 +1,56 @@
-# Especificação Funcional e Requisitos: Sistema Descentralizado de Diagnóstico Citológico (CELLo)
+# Functional Specification and Requirements: Decentralized Cytological Diagnostics System (CELLo)
 
-Este documento foca-se exclusivamente na **arquitetura conceptual, nos requisitos funcionais/não funcionais e nas especificidades técnicas** a desenvolver para o sistema de diagnóstico de citologia assistido por IA.
-
----
-
-## 1. Visão Geral e Arquitetura Descentralizada (Cliente-Servidor)
-
-O sistema adota uma arquitetura desacoplada para separar a computação intensiva de IA da interface de interceção do clínico/investigador:
-
-*   **Camada Cliente (Frontend / User Interface):**
-    *   **Papel:** Corre localmente no dispositivo do utilizador (via aplicação web leve).
-    *   **Responsabilidades:** Gestão do upload de imagens citológicas em alta resolução, seleção interativa de modelos de IA, envio de pedidos via API e renderização visual dos resultados (gráficos, relatórios e *overlays*).
-*   **Camada Servidor (Backend / Computational Node):**
-    *   **Papel:** Aloja a infraestrutura de GPU (ex: nuvem ou servidor institucional).
-    *   **Responsabilidades:** Gestão do ciclo de vida dos modelos de Deep Learning, execução do motor de segmentação celular, cálculo dos embeddings multimodais (BiomedCLIP) e processamento de inferência em paralelo das classes e probabilidades.
+This document focuses exclusively on the **conceptual architecture, functional/non-functional requirements, and technical specificities** to be developed for the AI-assisted cytology diagnostic system.
 
 ---
 
-## 2. Requisitos Funcionais
+## 1. Overview and Decentralized Architecture (Client-Server)
 
-### RF01: Seleção Dinâmica de Modelos de IA
-*   O sistema deve disponibilizar um catálogo dinâmico de modelos pré-treinados alojados no servidor (ex: *BiomedCLIP-PubMedBERT*, *DINO-DeiT-III*, *ClipBase* , etc).
-*   O utilizador deve poder alternar entre diferentes *backbones* diretamente na interface antes de submeter a imagem para análise, adaptando o motor de inferência ao objetivo clínico específico.
+The system adopts a decoupled architecture to separate intensive AI computation from the clinician/researcher interface:
 
-### RF02: Segmentação Celular Automatizada
-*   O subsistema de segmentação deve processar a imagem do esfregaço citológico para isolar entidades celulares individuais (evitando a análise puramente global da lâmina).
-*   Deve suportar tanto a segmentação automática de todas as células detetadas como a seleção interativa por parte do utilizador (se aplicável).
-
-### RF03: Classificação Individual por Célula (Zero-Shot & Supervised)
-*   Cada recorte celular segmentado deve ser submetido a uma pipeline de classificação individual.
-*   O sistema deve mapear a representação visual da célula face ao espaço textual clínico, avaliando a probabilidade de pertença às seguintes classes de referência:
-    *   **NA:** Saudável / Sem Anomalia
-    *   **Ta:** Estágio Tumoral Baixo
-    *   **T1:** Estágio Tumoral T1
-    *   **T2:** Estágio Tumoral T2
-    *   **T3 / T4:** Estágio Tumoral Avançado
-
-### RF04: Geração de Overlays Visuais e Relatórios
-*   A interface deve projetar sobre a imagem original um sistema de *overlays* (caixas delimitadoras ou máscaras coloridas) associados a cada célula segmentada.
-*   Cada overlay deve explicitar visualmente a classe prevista e o grau de confiança associado.
-*   Deve ser gerado em simultâneo um painel estatístico global com a distribuição de probabilidades de toda a lâmina.
+*   **Client Layer (Frontend / User Interface):**
+    *   **Role:** Runs locally on the user's device (via a lightweight web application).
+    *   **Responsibilities:** Management of high-resolution cytological image uploads, interactive AI model selection, API request submission, and visual rendering of results (charts, reports, and overlays).
+*   **Server Layer (Backend / Computational Node):**
+    *   **Role:** Hosts the GPU infrastructure (e.g., cloud or institutional server).
+    *   **Responsibilities:** Management of the deep learning model lifecycle, execution of the cell segmentation engine, calculation of multimodal embeddings (BiomedCLIP), and parallel inference processing of classes and probabilities.
 
 ---
 
-## 3. Requisitos Não Funcionais e Especificidades Técnicas
+## 2. Functional Requirements
 
-### RNF01: Desempenho e Escalabilidade (Servidor)
-*   O servidor deve garantir suporte a aceleração por hardware (GPUs NVIDIA com arquitetura CUDA) para assegurar que a segmentação e a inferência multimodal ocorram em tempo útil (alvo inferior a segundos por lâmina).
-*   O sistema deve implementar caching de modelos na memória VRAM para evitar latências excessivas na troca dinâmica de arquiteturas.
+### RF01: Dynamic AI Model Selection
+*   The system must provide a dynamic catalog of pre-trained models hosted on the server (e.g., *BiomedCLIP-PubMedBERT*, *DINO-DeiT-III*, *ClipBase*, etc.).
+*   The user must be able to switch between different backbones directly in the interface before submitting the image for analysis, adapting the inference engine to the specific clinical objective.
 
-### RNF02: Desacoplamento e Segurança de Comunicação
-*   A comunicação entre o Cliente e o Servidor deve ser gerida através de uma API RESTful robusta (ex: FastAPI), garantindo a validação de formatos de imagem (PNG, JPEG, TIFF de alta resolução) e a proteção de dados sensíveis de anatomopatologia.
+### RF02: Automated Cellular Segmentation
+*   The segmentation subsystem must process the cytological smear image to isolate individual cellular entities (avoiding a purely global analysis of the slide).
+*   It must support both the automated segmentation of all detected cells and interactive selection by the user (if applicable).
 
-### RNF03: Interpretabilidade e Explicabilidade (XAI)
-*   Além das previsões de classes, o pipeline deve prever a integração futura de mapas de atenção (*attention maps*) e métricas de interpretabilidade espacial, permitindo ao especialista auditar o motivo pelo qual o modelo atribuiu determinado estágio (Ta–T4) a uma célula específica.
+### RF03: Individual Cell Classification (Zero-Shot & Supervised)
+*   Each segmented cell crop must be submitted to an individual classification pipeline.
+*   The system must map the cell's visual representation against the clinical text space, evaluating the probability of belonging to the following reference classes:
+    *   **NA:** Healthy / No Anomaly
+    *   **Ta:** Low Tumor Stage
+    *   **T1:** Tumor Stage T1
+    *   **T2:** Tumor Stage T2
+    *   **T3 / T4:** Advanced Tumor Stage
+
+### RF04: Generation of Visual Overlays and Reports
+*   The interface must project a system of overlays (bounding boxes or colored masks) associated with each segmented cell onto the original image.
+*   Each overlay must visually make explicit the predicted class and the associated confidence level.
+*   A global statistical panel with the probability distribution of the entire slide must be generated simultaneously.
+
+---
+
+## 3. Non-Functional Requirements and Technical Specificities
+
+### RNF01: Performance and Scalability (Server)
+*   The server must ensure support for hardware acceleration (NVIDIA GPUs with CUDA architecture) to ensure that segmentation and multimodal inference occur in a timely manner (target under seconds per slide).
+*   The system must implement model caching in VRAM to prevent excessive latency during the dynamic switching of architectures.
+
+### RNF02: Decoupling and Communication Security
+*   Communication between the Client and the Server must be managed through a robust RESTful API (e.g., FastAPI), ensuring the validation of image formats (PNG, JPEG, high-resolution TIFF) and the protection of sensitive anatomical pathology data.
+
+### RNF03: Interpretability and Explainability (XAI)
+*   In addition to class predictions, the pipeline must provide for the future integration of attention maps and spatial interpretability metrics, allowing the specialist to audit why the model assigned a given stage (Ta–T4) to a specific cell.
