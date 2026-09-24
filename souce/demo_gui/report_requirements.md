@@ -20,7 +20,7 @@ O sistema adota uma arquitetura desacoplada para separar a computação intensiv
 ## 2. Requisitos Funcionais
 
 ### RF01: Seleção Dinâmica de Modelos de IA
-*   O sistema deve disponibilizar um catálogo dinâmico de modelos pré-treinados alojados no servidor (ex: *BiomedCLIP-PubMedBERT*, *DINO-DeiT-III*, modelos híbridos de grafos).
+*   O sistema deve disponibilizar um catálogo dinâmico de modelos pré-treinados alojados no servidor (ex: *BiomedCLIP-PubMedBERT*, *DINO-DeiT-III*, *ClipBase* , etc).
 *   O utilizador deve poder alternar entre diferentes *backbones* diretamente na interface antes de submeter a imagem para análise, adaptando o motor de inferência ao objetivo clínico específico.
 
 ### RF02: Segmentação Celular Automatizada
