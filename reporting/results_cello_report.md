@@ -358,101 +358,176 @@ To avoid exposing individual case or sample identifiers, the patient-level extra
 
 The BiomedCLIP extrapolation shows a different error profile, while the same structural limitations remain: low cellular yield and ambiguous/inconclusive cytology. These results should be interpreted as an extrapolation rather than a prospectively validated patient-level experiment.
 
+
+### 4.4.5 DINO-DeiT-III — Aggregate Inference Experiment
+
+To complement the original DINO-DeiT-III results, an additional aggregate inference experiment was performed using the same classification framework. Individual case identifiers and raw sample counts are intentionally omitted; results are reported exclusively as percentages.
+
+#### 4.4.5.1 Model Performance
+
+| Metric | DINO-DeiT-III |
+|---|---:|
+| Overall Accuracy | **83%** |
+| Balanced Accuracy | **89%** |
+| Classification Error | **17%** |
+
+#### 4.4.5.2 Confusion Matrix
+
+The confusion matrix is reported as row-normalized percentages, with the ground-truth class in the rows and the predicted class in the columns.
+
+| Ground Truth \ Predicted | NA | Ta | T1 | T2 |
+|---|---:|---:|---:|---:|
+| **NA** | **100%** | 0% | 0% | 0% |
+| **Ta** | 25% | **75%** | 0% | 0% |
+| **T1** | 0% | 0% | **100%** | 0% |
+| **T2** | 0% | 10% | 9% | **81%** |
+
+#### 4.4.5.3 Class-Level Results
+
+| Class | Precision | Recall |
+|---|---:|---:|
+| NA | 78% | **100%** |
+| Ta | 86% | 75% |
+| T1 | 86% | **100%** |
+| T2 | 79% | 81% |
+
+#### 4.4.5.4 Interpretation
+
+The additional DINO-DeiT-III inference experiment yielded an aggregate accuracy of **83%**. The model maintained strong recognition of the NA and T1 classes, while the largest residual confusion was associated with the Ta and T2 categories.
+
+The results are consistent with the original DINO analysis, in which class imbalance and morphological similarity between neighbouring tumour stages represent important sources of classification uncertainty. The aggregate experiment is therefore reported as a complementary inference analysis rather than as a replacement for the original model evaluation.
+
+---
+
+### 4.4.6 CLIP / BiomedCLIP — Aggregate Inference Experiment
+
+A corresponding aggregate inference experiment was performed using the CLIP-based biomedical vision-language model. As with the DINO experiment, individual case identifiers and raw sample counts are omitted and all results are expressed as percentages.
+
+#### 4.4.6.1 Model Performance
+
+| Metric | CLIP / BiomedCLIP |
+|---|---:|
+| Overall Accuracy | **87%** |
+| Balanced Accuracy | **81.8%** |
+| Classification Error | **13%** |
+
+#### 4.4.6.2 Confusion Matrix
+
+| Ground Truth \ Predicted | NA | Ta | T1 | T2 |
+|---|---:|---:|---:|---:|
+| **NA** | **98%** | 1% | 0% | 1% |
+| **Ta** | 14% | **79%** | 3% | 4% |
+| **T1** | 1% | 2% | **95%** | 2% |
+| **T2** | 5% | 29% | 11% | **55%** |
+
+#### 4.4.6.3 Class-Level Results
+
+| Class | Precision | Recall |
+|---|---:|---:|
+| NA | 84% | **98%** |
+| Ta | 89% | 79% |
+| T1 | 93% | **95%** |
+| T2 | 68% | 55% |
+
+#### 4.4.6.4 Interpretation
+
+The CLIP-based inference experiment achieved an aggregate accuracy of **87%**. The model showed strong recognition of NA and T1, while T2 remained the most challenging category. The principal residual confusion involved the Ta–T2 and T2–T1 boundaries.
+
+This behaviour is coherent with the original multimodal analysis, where the biomedical image-text representation provides useful semantic information but does not completely eliminate ambiguity between visually similar tumour stages.
+
+---
+
+### 4.4.7 DINO-DeiT-III vs. CLIP / BiomedCLIP
+
+The two additional experiments can be summarized using the same aggregate reporting format.
+
+| Metric | DINO-DeiT-III | CLIP / BiomedCLIP |
+|---|---:|---:|
+| **Overall Accuracy** | **83%** | **87%** |
+| Balanced Accuracy | **89%** | 81.8% |
+| Classification Error | 17% | **13%** |
+| Strongest classes | NA, T1 | NA, T1 |
+| Most challenging class | T2 | T2 |
+| Evaluation | Aggregate inference | Aggregate inference |
+
+Both experiments show strong recognition of the NA and T1 categories, with greater uncertainty in the more difficult tumour-stage distinctions. The DINO-based experiment provides a purely visual representation, whereas the CLIP-based experiment additionally benefits from the semantic structure of biomedical vision-language pre-training.
+
+The reported accuracies should therefore be interpreted as **aggregate model-inference results** within the corresponding experimental configurations, rather than as independent clinical validation estimates.
+
 ---
 
 ## 5. Continuous Follow-up: Arquitetura Multimodal (CLIP-based) para Recurrence Prediction — *Toy Example*
 
-> ⚠️ **Scope note:** esta secção é purely conceptual/illustrative. O dataset CELLo disponibilizado é **transversal** (uma amostra de urina por paciente, num único momento), sem visitas de seguimento reais nem *outcomes* de recidiva confirmados ao longo do tempo. O modelo aqui descrito **was not trained or validated** — é um exercício de desenho de arquitetura ("*toy example*"), e todas as trajetórias de pacientes e curvas de risco apresentadas em 5.3 são **sintéticas**, construídas apenas para ilustrar o comportamento esperado do *pipeline* proposto caso existissem dados longitudinais reais.
+> ⚠️ **Scope note:** esta secção é conceptual/illustrative. O dataset CELLo disponibilizado é **transversal**, com amostras recolhidas num único momento, e não contém visitas longitudinais nem outcomes de recidiva confirmados ao longo do tempo. Assim, a arquitetura apresentada nesta secção **não foi treinada nem validada para recurrence prediction**. As trajetórias e curvas de risco apresentadas em 5.3–5.4 constituem um **toy example**, utilizado exclusivamente para demonstrar como o pipeline poderia funcionar caso fossem disponibilizados dados longitudinais clínicos.
 
 ### 5.1 Clinical Motivation
 
-O cancro da bexiga tem uma taxa de recidiva que pode atingir **70%**, exigindo vigilância prolongada tipicamente feita por cistoscopias invasivas repetidas a cada 3–6 meses. A citologia urinária isolada (um único momento) já é usada como alternativa não-invasiva, mas continua a ser uma **decisão pontual** (presente/ausente cancro naquele momento) em vez de uma **estimativa contínua de risco** que acompanhe a evolução do paciente entre consultas. Isto motiva desenhar uma arquitetura que:
+O cancro da bexiga apresenta uma elevada necessidade de vigilância prolongada, tornando interessante complementar a avaliação pontual da citologia com uma representação longitudinal do estado do paciente.
 
-1. processe cada amostra de urina de seguimento (cada "visita") com o mesmo *encoder* multimodal já validado na Section 4 (BiomedCLIP);
-2. **acumule o histórico** de visitas de um mesmo paciente numa representação temporal;
-3. produza uma **curva de risco contínua** (não apenas uma class discreta), atualizável a cada nova amostra recolhida.
+A principal extensão proposta consiste em combinar:
+
+1. **informação visual** proveniente das imagens celulares;
+2. **informação textual/clínica** codificada pelo *text encoder* do CLIP;
+3. **características demográficas e comportamentais**, como idade, género e smoking status;
+4. **informação clínica adicional**, como sintomas, antecedentes relevantes e marcadores laboratoriais;
+5. **histórico temporal**, incluindo o intervalo entre visitas e as representações obtidas em visitas anteriores.
+
+Desta forma, cada nova amostra de urina pode atualizar uma representação latente do estado do paciente, permitindo que o modelo produza simultaneamente uma classificação do estado atual e uma estimativa contínua de risco futuro.
 
 ### 5.2 Proposed Architecture: "CELLo-Forecast" (CLIP-based Temporal Risk Model)
 
-```mermaid
-flowchart TD
-    subgraph V1["Visita t1"]
-        A1[Imagens de células<br/>imaging flow cytometry] --> B1[BiomedCLIP<br/>Visual Encoder]
-        B1 --> C1[Attention Pooling<br/>ponderado pela qualidade/nº de eventos]
-        P1[Prompt clínico texto<br/>'estágio, grau, nº células'] --> T1[BiomedCLIP<br/>Text Encoder]
-        C1 --> F1[Fusão cross-attention]
-        T1 --> F1
-        F1 --> Z1["Embedding da visita z(t1)"]
-    end
+A arquitetura proposta mantém o **BiomedCLIP** como núcleo de representação multimodal, mas acrescenta uma camada explícita de *patient-level conditioning*.
 
-    subgraph V2["Visita t2"]
-        A2[Imagens de células] --> B2[BiomedCLIP<br/>Visual Encoder]
-        B2 --> C2[Attention Pooling]
-        P2[Prompt clínico texto] --> T2[BiomedCLIP<br/>Text Encoder]
-        C2 --> F2[Fusão cross-attention]
-        T2 --> F2
-        F2 --> Z2["Embedding da visita z(t2)"]
-    end
+![CELLo-Forecast — CLIP-based Multimodal Temporal Risk Architecture](images_report/image_28.png)
 
-    subgraph Vn["Visita tn (mais recente)"]
-        An[Imagens de células] --> Bn[BiomedCLIP<br/>Visual Encoder]
-        Bn --> Cn[Attention Pooling]
-        Pn[Prompt clínico texto] --> Tn[BiomedCLIP<br/>Text Encoder]
-        Cn --> Fn[Fusão cross-attention]
-        Tn --> Fn
-        Fn --> Zn["Embedding da visita z(tn)"]
-    end
+#### Main Components
 
-    Z1 --> SEQ["Temporal Encoding<br/>(Δt entre visitas, Fourier time-embedding)"]
-    Z2 --> SEQ
-    Zn --> SEQ
-    SEQ --> TR["Transformer temporal leve<br/>(auto-atenção sobre a sequência de visitas)"]
-    TR --> H["Estado latente do paciente h(tn)"]
-    H --> CLS["Cabeça de classificação<br/>de estágio (reutiliza Section 4)"]
-    H --> HAZ["Cabeça de previsão de risco<br/>r(tn+3m), r(tn+6m), r(tn+12m), ..."]
-    HAZ --> CURVE["Curva de risco de recidiva<br/>contínua no tempo"]
-```
+1. **Per-visit visual encoder (BiomedCLIP, Section 4)**
 
-**Main Components:**
+   Cada amostra de urina é processada célula-a-célula pelo *visual encoder* do BiomedCLIP. Um módulo de **attention pooling** agrega os embeddings celulares num único vetor representativo da visita.
 
-1. **Per-visit multimodal encoder (BiomedCLIP, Section 4):** cada amostra de urina de uma visita é processada célula-a-célula pelo *visual encoder* já ajustado; um módulo de ***attention pooling* sensível à qualidade** agrega os embeddings de célula num único vetor por visita, ponderando por confiança/nitidez — abordando diretamente a limitação de amostras com poucos eventos celulares identificada nas Secções 3.5 e 4.4 (ex.: casos como the sample ou D3).
-2. **Text Conditioning (via *text encoder* do CLIP):** um *prompt* clínico curto (estágio previsto, grau, nº de eventos, contexto sintomático) é codificado no mesmo espaço semântico e fundido por *cross-attention* com o embedding visual, produzindo um embedding multimodal por visita, `z(t)`.
-3. **Temporal Encoding:** o intervalo real entre visitas (Δt, em meses) é injetado using a *time-embedding* contínuo (tipo Fourier/*sinusoidal*), permitindo lidar com follow-up com espaçamento irregular — comum na prática clínica.
-4. **Temporal Aggregator (Transformer leve):** a sequência de embeddings `[z(t1), ..., z(tn)]` passa por um pequeno *Transformer encoder* (poucas camadas, dado o número tipicamente reduzido de visitas por paciente), produzindo um estado latente `h(tn)` que resume toda a história do paciente até à visita mais recente.
-5. **Two output heads:**
-   - **Classificação de estágio** na visita atual (reutiliza a cabeça da Section 4, mantendo a tarefa original);
-   - **Previsão de risco contínuo** — uma cabeça de *forecasting* que projeta `h(tn)` em vários horizontes futuros (+3, +6, +12, +24 meses), à semelhança de modelos de sobrevivência em tempo discreto, produzindo uma **curva de risco de recidiva**, e não apenas um rótulo.
-6. **Combined loss functions** (treino conjunto, caso existissem dados longitudinais reais):
-   - Entropia cruzada/ASL para a classificação de estágio por visita (igual à Section 1/4);
-   - Perda de sobrevivência em tempo discreto (ou *ranking* estilo Cox) para a cabeça de *forecasting*, usando o tempo real até à recidiva confirmada como supervisão;
-   - Termo de regularização de suavidade temporal, penalizando saltos abruptos entre visitas consecutivas sem alteração morfológica correspondente.
+   A atenção pode incorporar informação relacionada com a qualidade da imagem, confiança da previsão e características da amostra, permitindo que células mais informativas contribuam mais para a representação final.
 
-### 5.3 Toy Example with the Available Data
+2. **Clinical text conditioning**
 
-Como o CELLo é transversal, simulou-se — **apenas para fins ilustrativos** — o comportamento do *pipeline* atribuindo três amostras reais da Supplementary Table 3 a três "visitas" hipotéticas do **mesmo paciente sintético**, simulando uma trajetória de agravamento (Paciente A) e uma trajetória estável (Paciente B):
+   Informação clínica estruturada pode ser convertida num pequeno *clinical prompt*, por exemplo:
 
-| Synthetic trajectory | Follow-up month | Source phenotype | Illustrative trajectory |
-|---|---:|---|---|
-| Progression | 0 | Lower-stage / negative cytology pattern | Baseline |
-| Progression | 6 | Atypical / inflammatory pattern | Intermediate risk |
-| Progression | 12 | Higher-stage / positive cytology pattern | Increased risk |
-| Stable | 0 | Lower-stage pattern | Baseline |
-| Stable | 6 | Lower-stage pattern | Stable |
-| Stable | 12 | Lower-stage pattern | Stable |
+   > `"Age: 67; Gender: male; Smoking: former smoker; Symptoms: hematuria; Cytology: atypical"`
 
-The architecture da Section 5.2 (não treinada — apenas a lógica conceptual) would produce, for this toy example, a risk curve como a seguinte:
+   O *text encoder* do BiomedCLIP transforma esta informação num embedding no mesmo espaço multimodal da representação visual.
 
-![Toy Example — curva de previsão contínua de recidiva (100% sintética)](images_report/image_27.png)
-*Curva 100% sintética — ilustra apenas o comportamento esperado da cabeça de forecasting, não uma previsão real.*
+   Este mecanismo permite incorporar informação que não está diretamente presente na imagem celular.
 
-**Illustrative interpretation:** o Paciente A shows a progressive increase do risco estimado (8% → 27% → 63%) as a morfologia celular evolui de padrão Ta para atipia e depois para T1+CIS confirmado — crossing an illustrative alert threshold (50%) around month 10, **antes** da confirmação histológica formal no mês 12, o que seria o valor clínico pretendido (antecipação). O Paciente B remains stable and low (6–12%), consistent with no progression.
+3. **Patient-level clinical features**
 
-### 5.4 Limitations and Next Steps
+   Para além do *text prompt*, variáveis estruturadas podem ser processadas por um pequeno **clinical feature encoder**.
 
-- **No real longitudinal follow-up data were used** — a "trajetória temporal" acima é uma reatribuição artificial de 3 amostras transversais distintas a um paciente fictício.
-- To train and validate esta arquitetura would be required um **dataset longitudinal do CELLo** (múltiplas colheitas por paciente, com datas e *outcome* de recidiva confirmado por cistoscopia/histologia).
-- A cabeça de *forecasting* proposta segue a lógica de modelos de sobrevivência em tempo discreto (ex. DeepHit, Nnet-survival), still to be adapted and tested in this domain.
-- O módulo de *attention pooling* sensível à qualidade celular should be calibrated com a Supplementary Table 3 completa (contagens de eventos por amostra), explicitly correlating confiança da previsão com nº de eventos capturados.
+   Exemplos de características potenciais incluem:
+
+   | Feature group   | Example variables                                    |
+   | --------------- | ---------------------------------------------------- |
+   | Demographic     | Age, gender                                          |
+   | Lifestyle       | Smoking status, smoking exposure                     |
+   | Clinical        | Hematuria, urinary symptoms, previous history        |
+   | Laboratory      | Selected laboratory markers                          |
+   | Disease history | Previous diagnosis, stage, grade                     |
+   | Follow-up       | Time since previous visit, number of previous visits |
+
+   Estas variáveis podem ser normalizadas e projetadas para o mesmo espaço dimensional dos embeddings multimodais.
+
+4. **Cross-modal fusion**
+
+   A representação visual da visita e o embedding textual clínico são combinados através de **cross-attention**.
+
+   Em paralelo, as características estruturadas do paciente são projetadas através de um *MLP* e incorporadas na representação multimodal:
+
+   `z(t) = Fusion(z_visual(t), z_text(t), z_clinical(t))`
+
+   Assim, cada visita é representada não apenas pela morfologia celular, mas também pelo contexto clínico disponível naquele moment
+
+
+   ![CELLo-Forecast — CLIP-based Multimodal Temporal Risk Architecture](images_report/image_followup_arch.png)
+
 
 ## 6. Main References
 
