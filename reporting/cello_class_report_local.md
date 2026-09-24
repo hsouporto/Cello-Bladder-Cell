@@ -1,6 +1,6 @@
 # Classification Experiment Results — CELLo Project
 
-*Compiled from: (1) EMBC 2026 paper "Enhancing Cytological Staining-Free Image Classification with Robust Vision Transformers" (DINO-DeiT-III), (2) Overleaf/BSPC manuscript "Adapting Biomedical Vision–Language Foundation Models for Fine-Grained Bladder Cancer Staging from Urine Cytology" (BiomedCLIP), e (3) Supplementary Table 3 (cell-event counts per urine sample).*
+*Compiled from: (1) EMBC 2026 paper "Enhancing Cytological Staining-Free Image Classification with Robust Vision Transformers" (DINO-DeiT-III), (2) BSPC manuscript "Adapting Biomedical Vision–Language Foundation Models for Fine-Grained Bladder Cancer Staging from Urine Cytology" (BiomedCLIP), e (3) Supplementary Table 3 (cell-event counts per urine sample).*
 
 ---
 
@@ -29,7 +29,7 @@ The proposed model combines um *backbone* **DeiT-III** with the self-supervised 
 
 O DINO-DeiT-III consistently outperforms all *baselines* nos três *datasets*, com o largest gain observed no CELLo (dataset com maior desequilíbrio de classs): **+4.5 p.p.** de AUC compared with ResNet-50 e **+3.8 p.p.** compared with ConvNeXtV2.
 
-### 1.3 Ablation Study (dataset CELLo)
+### 1.3 Ablation Study (Dataset CELLo)
 
 | Added Component | Reported Gain |
 |---|---|
