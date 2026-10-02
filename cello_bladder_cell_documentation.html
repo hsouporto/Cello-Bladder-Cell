@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cello-Bladder-Cell | Bioinformatics & Computational Biology</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        scientific: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-900/40">
+                    <i class="fa-solid fa-dna text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">Cello-Bladder-Cell</span>
+                    <span class="hidden sm:inline-block ml-2 text-xs px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">v1.2.0</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#overview" class="hover:text-emerald-400 transition-colors">Overview</a>
+                <a href="#architecture" class="hover:text-emerald-400 transition-colors">Architecture</a>
+                <a href="#interactive-model" class="hover:text-emerald-400 transition-colors">Cell Explorer</a>
+                <a href="#quickstart" class="hover:text-emerald-400 transition-colors">Quick Start</a>
+                <a href="https://github.com/hsouporto/Cello-Bladder-Cell" target="_blank" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                    <i class="fa-brands fa-github text-base"></i> GitHub
+                </a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/hsouporto/Cello-Bladder-Cell" target="_blank" class="px-4 py-2 text-sm font-medium rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition-all flex items-center gap-2">
+                    <i class="fa-brands fa-github"></i>
+                    <span>Repository</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32 border-b border-slate-900">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.1),transparent_50%)]"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-emerald-400 text-xs font-medium mb-6 shadow-inner">
+                    <i class="fa-solid fa-microscope"></i> Computational Bioinformatics Research Portal
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 max-w-4xl mx-auto">
+                    Mapping Cellular Dynamics in <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Bladder Tissue</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+                    A specialized computational model and analysis framework designed by <a href="https://github.com/hsouporto" class="text-emerald-400 underline underline-offset-4 hover:text-emerald-300 font-medium" target="_blank">hsouporto</a> for investigating urothelial cell phenotypes, gene expression profiles, and structural biology.
+                </p>
+
+                <!-- Badges -->
+                <div class="flex flex-wrap justify-center items-center gap-3 mb-12">
+                    <a href="https://github.com/hsouporto/Cello-Bladder-Cell" target="_blank">
+                        <img src="https://img.shields.io/github/stars/hsouporto/Cello-Bladder-Cell?style=flat-square&color=10b981&label=GitHub%20Stars&logo=github" alt="GitHub Stars">
+                    </a>
+                    <a href="https://github.com/hsouporto/Cello-Bladder-Cell/blob/main/LICENSE" target="_blank">
+                        <img src="https://img.shields.io/github/license/hsouporto/Cello-Bladder-Cell?style=flat-square&color=059669&label=License" alt="License">
+                    </a>
+                    <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&color=3776ab" alt="Python Version">
+                    <img src="https://img.shields.io/badge/Status-Active%20Research-emerald?style=flat-square" alt="Research Status">
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#quickstart" class="px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-900/40 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-terminal"></i> Get Started
+                    </a>
+                    <a href="#interactive-model" class="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-atom"></i> Explore Interactive Model
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview" class="py-20 bg-slate-900/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-white mb-4">Project Overview</h2>
+                    <p class="text-slate-400">
+                        Cello-Bladder-Cell bridges computational modeling with high-throughput single-cell RNA sequencing (scRNA-seq) analysis specifically optimized for urothelial tissues.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-slate-900/80 border border-slate-800/80 p-8 rounded-2xl shadow-xl hover:border-emerald-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-800/60 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-chart-line text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Transcriptomic Pipeline</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Robust preprocessing, normalization, and dimensional reduction pipelines designed to handle noisy single-cell bladder tissue datasets.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800/80 p-8 rounded-2xl shadow-xl hover:border-emerald-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-800/60 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-network-wired text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Cell Clustering & Annotation</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Automated marker gene detection algorithms to accurately classify umbrella cells, intermediate cells, and basal urothelial cell types.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800/80 p-8 rounded-2xl shadow-xl hover:border-emerald-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-800/60 flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cubes text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Extensible Architecture</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Modular Python package structure enabling researchers to plug in custom clustering models or visualization plugins with ease.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="py-20 border-t border-slate-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="text-emerald-400 font-semibold text-sm uppercase tracking-wider">System Architecture</span>
+                        <h2 class="text-3xl font-bold text-white mt-2 mb-6">Engineered for Precision and Reproducibility</h2>
+                        <p class="text-slate-400 mb-6 leading-relaxed">
+                            The codebase is organized into discrete functional modules ensuring end-to-end traceability from raw count matrices to publication-ready UMAP projections and differential expression reports.
+                        </p>
+                        <ul class="space-y-4 text-slate-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span><strong>Data Ingestion:</strong> Supports 10x Genomics HDF5 formats and standard CSV/TSV expression matrices.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span><strong>Quality Control Filters:</strong> Automatic outlier removal based on mitochondrial gene percentage and library size metrics.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                                <span><strong>Visual Export:</strong> High-resolution vector graphic exports for publication figures.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-2xl font-mono text-xs text-slate-300">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            </div>
+                            <span class="text-slate-500">Cello-Bladder-Cell Directory Tree</span>
+                        </div>
+                        <pre class="overflow-x-auto text-emerald-400 leading-relaxed"><code>Cello-Bladder-Cell/
+├── 📁 data/
+│   ├── raw_counts.h5
+│   └── metadata_annotations.csv
+├── 📁 src/
+│   ├── __init__.py
+│   ├── preprocessing.py
+│   ├── clustering.py
+│   └── visualizer.py
+├── 📁 notebooks/
+│   └── exploratory_analysis.ipynb
+├── requirements.txt
+└── README.md</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive-model" class="py-20 bg-slate-900/30 border-t border-slate-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold tracking-tight text-white mb-4">Interactive Bladder Cell Subpopulation Explorer</h2>
+                    <p class="text-slate-400">
+                        Select a urothelial cell phenotype below to inspect simulated marker gene expression and functional attributes handled by the repository toolkit.
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+                        <button onclick="updateCellType('umbrella')" id="btn-umbrella" class="px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium text-sm transition-all shadow-md">Umbrella Cells</button>
+                        <button onclick="updateCellType('intermediate')" id="btn-intermediate" class="px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium text-sm transition-all">Intermediate Cells</button>
+                        <button onclick="updateCellType('basal')" id="btn-basal" class="px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium text-sm transition-all">Basal Cells</button>
+                        <button onclick="updateCellType('stromal')" id="btn-stromal" class="px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium text-sm transition-all">Stromal & Immune</button>
+                    </div>
+
+                    <div id="cell-info-box" class="bg-slate-950 border border-slate-800 rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 id="cell-title" class="text-xl font-bold text-white">Umbrella Cells (Superficial Layer)</h3>
+                            <span id="cell-marker-badge" class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 text-xs font-mono border border-emerald-800">UPK1A, UPK2, KRT20</span>
+                        </div>
+                        <p id="cell-desc" class="text-slate-300 text-sm leading-relaxed mb-6">
+                            Large, often multinucleated superficial cells responsible for the impermeable barrier function of the bladder epithelium. Characterized by high expression of uroplakins.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                                <span class="block text-xs text-slate-400 mb-1">Mean Expression (TPM)</span>
+                                <span id="stat-expr" class="text-lg font-bold text-emerald-400">342.8</span>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                                <span class="block text-xs text-slate-400 mb-1">Cluster Proportion</span>
+                                <span id="stat-prop" class="text-lg font-bold text-teal-400">18.4%</span>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                                <span class="block text-xs text-slate-400 mb-1">Confidence Score</span>
+                                <span id="stat-conf" class="text-lg font-bold text-emerald-400">0.96</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quickstart" class="py-20 border-t border-slate-900">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold tracking-tight text-white mb-4">Quick Start Installation</h2>
+                    <p class="text-slate-400">Clone the repository from hsouporto and execute the analysis pipeline.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                        <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+                            <span>1. Clone & Install Dependencies</span>
+                            <button onclick="copyCode(this, 'cmd1')" class="hover:text-white flex items-center gap-1 transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="p-4 bg-slate-900 overflow-x-auto font-mono text-sm text-emerald-400">
+                            <pre id="cmd1">git clone https://github.com/hsouporto/Cello-Bladder-Cell.git
+cd Cello-Bladder-Cell
+pip install -r requirements.txt</pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                        <div class="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+                            <span>2. Run Preprocessing & Clustering Pipeline</span>
+                            <button onclick="copyCode(this, 'cmd2')" class="hover:text-white flex items-center gap-1 transition-colors">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <div class="p-4 bg-slate-900 overflow-x-auto font-mono text-sm text-emerald-400">
+                            <pre id="cmd2">python src/preprocessing.py --input data/raw_counts.h5 --output data/processed/
+python src/clustering.py --config configs/default.yaml</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-900 bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center">
+                    <i class="fa-solid fa-dna text-white text-sm"></i>
+                </div>
+                <span class="font-semibold text-white">Cello-Bladder-Cell</span>
+                <span class="text-xs text-slate-500">© 2026 hsouporto. MIT License.</span>
+            </div>
+            <div class="flex items-center space-x-6 text-slate-400 text-sm">
+                <a href="https://github.com/hsouporto/Cello-Bladder-Cell" target="_blank" class="hover:text-white transition-colors">
+                    <i class="fa-brands fa-github text-lg"></i>
+                </a>
+                <a href="https://github.com/hsouporto" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-shield"></i> hsouporto Profile
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const cellData = {
+            umbrella: {
+                title: "Umbrella Cells (Superficial Layer)",
+                marker: "UPK1A, UPK2, KRT20",
+                desc: "Large, often multinucleated superficial cells responsible for the impermeable barrier function of the bladder epithelium. Characterized by high expression of uroplakins.",
+                expr: "342.8",
+                prop: "18.4%",
+                conf: "0.96"
+            },
+            intermediate: {
+                title: "Intermediate Cells",
+                marker: "KRT5, KRT13, UPK3A",
+                desc: "Stratified transitional epithelial layers situated between basal and superficial umbrella cells, acting as progenitors during epithelial regeneration.",
+                expr: "215.4",
+                prop: "45.2%",
+                conf: "0.91"
+            },
+            basal: {
+                title: "Basal Urothelial Cells",
+                marker: "KRT5, KRT14, TP63",
+                desc: "Progenitor stem cell population anchored to the basement membrane, critical for self-renewal and tissue repair following injury.",
+                expr: "189.1",
+                prop: "26.1%",
+                conf: "0.94"
+            },
+            stromal: {
+                title: "Stromal & Immune Cells",
+                marker: "VIM, CDH5, PTPRC",
+                desc: "Fibroblasts, smooth muscle cells, and infiltrated immune components supporting the lamina propria and extracellular matrix structure.",
+                expr: "98.5",
+                prop: "10.3%",
+                conf: "0.88"
+            }
+        };
+
+        function updateCellType(type) {
+            // Update buttons
+            ['umbrella', 'intermediate', 'basal', 'stromal'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if (t === type) {
+                    btn.className = "px-4 py-3 rounded-xl bg-emerald-600 text-white font-medium text-sm transition-all shadow-md";
+                } else {
+                    btn.className = "px-4 py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium text-sm transition-all";
+                }
+            });
+
+            // Update info
+            const data = cellData[type];
+            document.getElementById('cell-title').innerText = data.title;
+            document.getElementById('cell-marker-badge').innerText = data.marker;
+            document.getElementById('cell-desc').innerText = data.desc;
+            document.getElementById('stat-expr').innerText = data.expr;
+            document.getElementById('stat-prop').innerText = data.prop;
+            document.getElementById('stat-conf').innerText = data.conf;
+        }
+
+        function copyCode(btn, elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
